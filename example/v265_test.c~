@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
   int length;
   int ret;
   unsigned short data16[65536];
-  int i,j;
+  int i;
   unsigned int address;
   /* for time */
   struct timespec ts0, ts1;

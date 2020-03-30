@@ -68,7 +68,7 @@ unsigned char calc_crc(void *buf,unsigned int len){
   return crc;
 }
 
-int VMEopen(char *IpAddr, int IpPort){
+int VMEGopen(char *IpAddr, int IpPort){
   int sock;
   struct sockaddr_in SockAddr;
   int one;
@@ -88,11 +88,11 @@ int VMEopen(char *IpAddr, int IpPort){
   return sock;
 }
 
-void VMEclose(int sock){
+void VMEGclose(int sock){
   close(sock);
 }
 
-int VMEwrite(int sock, unsigned short mode, unsigned int address, void *data, int bytes){
+int VMEGwrite(int sock, unsigned short mode, unsigned int address, void *data, int bytes){
   struct packet_buf buf;
   unsigned char *buftop;
   unsigned char *buf8;
@@ -153,7 +153,7 @@ int VMEwrite(int sock, unsigned short mode, unsigned int address, void *data, in
   return 0;
 }
 
-int VMEread(int sock, unsigned short mode, unsigned int address, void *data, int bytes){
+int VMEGread(int sock, unsigned short mode, unsigned int address, void *data, int bytes){
   struct packet_buf buf;
   unsigned char *buftop;
   unsigned char *buf8;
@@ -246,7 +246,7 @@ int VMEread(int sock, unsigned short mode, unsigned int address, void *data, int
   return 0;
 }
 
-int VMEread_req(int sock, unsigned short mode, unsigned int address, void *data, int bytes, int id){
+int VMEGread_req(int sock, unsigned short mode, unsigned int address, void *data, int bytes, int id){
   struct packet_buf buf;
   unsigned char *buftop;
   int i;
@@ -272,7 +272,7 @@ int VMEread_req(int sock, unsigned short mode, unsigned int address, void *data,
   return 0;
 }
 
-int VMEread_rcv(int sock, unsigned short mode, unsigned int address, void *data, int bytes, int id){
+int VMEGread_rcv(int sock, unsigned short mode, unsigned int address, void *data, int bytes, int id){
   struct packet_buf buf;
   unsigned char *buftop;
   unsigned char *buf8;

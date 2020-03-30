@@ -1,2 +1,9 @@
 *~
 *.o
+utils/rbcp_read
+utils/rbcp_write
+utils/vmeg_delay
+utils/vmeg_nodelay
+utils/vme_test
+example/v265_test
+example/v265_test2

@@ -29,6 +29,8 @@
 
 #define HEADER_SIZE 12
 
+#define calc_crc11(AA) calc_crc(AA,11)
+
 struct packet_buf {
   unsigned int address;
   unsigned int length;
@@ -114,7 +116,7 @@ int VMEGwrite(int sock, unsigned short mode, unsigned int address, void *data, i
   mode|=0x8000;
   buf.mode=htons(mode);
   buf.id=ID;
-  buf.crc=calc_crc(&buf,(unsigned int)(HEADER_SIZE-1));
+  buf.crc=calc_crc11(&buf);
 
   /* put data */
   if ((mode&0x0c00)==D8){
@@ -146,7 +148,7 @@ int VMEGwrite(int sock, unsigned short mode, unsigned int address, void *data, i
 #endif
   /* check error status */
   if (buf.id!=ID){                    printf("ID check NG\n");    return -1;  }
-  if (calc_crc(&buf,(HEADER_SIZE-1))!=buf.crc){    printf("CRC check NG\n");   return -1;  }
+  if (calc_crc11(&buf)!=buf.crc){     printf("CRC check NG\n");   return -1;  }
   if (buf.mode&0x0100){               printf("corrupt packet\n"); return -1;  }
   if (buf.mode&0x0400){               printf("VME timeout\n");    return -1;  }
   ID++;
@@ -176,7 +178,7 @@ int VMEGread(int sock, unsigned short mode, unsigned int address, void *data, in
   buf.length =htonl((unsigned int)(bytes));
   buf.mode=htons(mode);
   buf.id=ID;
-  buf.crc=calc_crc(&buf,(unsigned int)(HEADER_SIZE-1));
+  buf.crc=calc_crc11(&buf);
 
   /* send packet */
 #if DEBUG
@@ -205,7 +207,7 @@ int VMEGread(int sock, unsigned short mode, unsigned int address, void *data, in
 #endif
   /* check error status */
   if (buf.id!=ID){                    printf("ID check NG\n");    return -1;  }
-  if (calc_crc(&buf,(HEADER_SIZE-1))!=buf.crc){    printf("CRC check NG\n");   return -1;  }
+  if (calc_crc11(&buf)!=buf.crc){     printf("CRC check NG\n");   return -1;  }
   if (buf.mode&0x0100){               printf("corrupt packet\n"); return -1;  }
   if (buf.mode&0x0400){               printf("VME timeout\n");    return -1;  }
   if (ntohl(buf.length)!=bytes){      printf("size diff.\n");     return -1;  }
@@ -259,7 +261,7 @@ int VMEGread_req(int sock, unsigned short mode, unsigned int address, void *data
   buf.length =htonl((unsigned int)(bytes));
   buf.mode=htons(mode);
   buf.id=id;
-  buf.crc=calc_crc(&buf,(unsigned int)(HEADER_SIZE-1));
+  buf.crc=calc_crc11(&buf);
 
   /* send packet */
 #if DEBUG
@@ -303,7 +305,7 @@ int VMEGread_rcv(int sock, unsigned short mode, unsigned int address, void *data
 
   /* check error status */
   if (buf.id!=id){                    printf("ID check NG\n");    return -1;  }
-  if (calc_crc(&buf,(HEADER_SIZE-1))!=buf.crc){    printf("CRC check NG\n");   return -1;  }
+  if (calc_crc11(&buf)!=buf.crc){     printf("CRC check NG\n");   return -1;  }
   if (buf.mode&0x0100){               printf("corrupt packet\n"); return -1;  }
   if (buf.mode&0x0400){               printf("VME timeout\n");    return -1;  }
   if (ntohl(buf.length)!=bytes){      printf("size diff.\n");     return -1;  }

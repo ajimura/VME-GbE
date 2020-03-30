@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
   int loop;
   int length;
   int ret;
-  unsigned short data16[65536];
+  unsigned short data16[128];
   int i;
   unsigned int address;
   /* for time */
