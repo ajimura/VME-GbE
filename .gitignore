@@ -7,3 +7,6 @@ utils/vmeg_nodelay
 utils/vme_test
 example/v265_test
 example/v265_test2
+example/v265_mon
+example/v265_clear
+example/v265_daq

@@ -12,7 +12,7 @@
 #include <netinet/tcp.h>
 #include <time.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 #define A16 0x0000
 #define A24 0x0100
