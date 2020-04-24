@@ -28,6 +28,7 @@ int main(int argc, char *argv[]){
   struct timespec ts0, ts1;
   double t0,t1;
   unsigned short scr;
+  int waitcount;
 
   if (argc<3){
     printf("vme_test <ipaddr> <ipport>\n");
@@ -58,14 +59,26 @@ int main(int argc, char *argv[]){
       VMEGclose(sock);
       exit(-1);
     }
-
+    waitcount=0;
     /* wait "not empty" */
     while((scr&0x8000)==0){
+      address=BASEADDR+ADDRSCR;
+      if ((ret=VMEGread(sock,A24|D16,address,&scr,2))<0){
+	printf("Error!\n");
+	VMEGclose(sock);
+	exit(-1);
+      }
+      if ((waitcount++)>10000){
+	printf("Timeout!\n");
+	VMEGclose(sock);
+	exit(-1);
+      }
       usleep(200);
     }
     clock_gettime(CLOCK_MONOTONIC,&ts0);
 
     /* get data */
+    address=BASEADDR+ADDRDAT;
     if ((ret=VMEGread_a24d16_fix(sock,address,data16,32))<0){
       printf("Error!\n");
       VMEGclose(sock);
@@ -83,6 +96,13 @@ int main(int argc, char *argv[]){
     for(j=0;j<16;j++)
       printf("%04x ",data16[j]);
     printf("\n");
+
+    address=BASEADDR+ADDRCLR;
+    if ((ret=VMEGread(sock,A24|D16,address,data16,2))<0){
+      printf("Error!\n");
+      VMEGclose(sock);
+      exit(-1);
+    }
   }
 
 
