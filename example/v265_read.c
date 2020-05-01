@@ -40,19 +40,6 @@ int main(int argc, char *argv[]){
 
   if ((sock=VMEGopen(IpAddr, IpPort))<0) exit(1);
 
-  printf("Loop? ");
-  fgets(line,100,stdin);
-  sscanf(line,"%d",&loop);
-
-  address=BASEADDR+ADDRCLR;
-  if ((ret=VMEGread(sock,A24|D16,address,data16,2))<0){
-    printf("Error!\n");
-    VMEGclose(sock);
-    exit(-1);
-  }
-
-  printf("start...\n");
-  for(i=0;i<loop;i++){
     /* get current status */
     address=BASEADDR+ADDRSCR;
     if ((ret=VMEGread(sock,A24|D16,address,&scr,2))<0){
@@ -89,7 +76,6 @@ int main(int argc, char *argv[]){
     clock_gettime(CLOCK_MONOTONIC,&ts1);
     t0=(ts0.tv_sec*1.)+(ts0.tv_nsec/1000000000.);
     t1=(ts1.tv_sec*1.)+(ts1.tv_nsec/1000000000.);
-    printf("--- %d --------------------------------------\n",i);
     printf("time: %lf %lf %lf\n",t1,t0,t1-t0);
 
     /* print data */
@@ -106,8 +92,6 @@ int main(int argc, char *argv[]){
       exit(-1);
     }
     */
-  }
-
 
   VMEGclose(sock);
   exit(0);
